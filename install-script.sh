@@ -3,8 +3,7 @@
 set -eu
 
 # Docker
-sudo apt remove --yes docker docker-engine docker.io \
-    && sudo apt update \
+sudo apt update \
     && sudo apt --yes --no-install-recommends install \
         apt-transport-https \
         ca-certificates \
