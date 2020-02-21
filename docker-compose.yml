@@ -1,0 +1,38 @@
+version: "3"
+services:
+  pg_master:
+    build: ./master
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=test
+      - PG_REP_USER=rep
+      - PG_REP_PASSWORD=postgres
+    ports:
+      - "15432:5432"
+    networks:
+      test:
+        ipv4_address: 192.168.144.4
+  pg_slave:
+    build: ./slave
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=test
+      - PG_REP_USER=rep
+      - PG_MASTER_HOST=pg_master
+      - PG_REP_PASSWORD=postgres
+    ports:
+      - "15433:5432"
+    networks:
+      test:
+        ipv4_address: 192.168.144.5
+volumes:
+  pg_data:
+networks:
+  test:
+    ipam:
+      config:
+        - subnet: 192.168.0.0/16
